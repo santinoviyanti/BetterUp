@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/quiz.css' %}" /> <!-- Menambahkan quiz.css -->
+  <title>Diagnosa | BetterUp</title>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="main-container">
+    <div class="nav">
+      <div class="logo">
+        <a href="/">BetterUp</a>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="{% url 'home' %}">Beranda</a></li>
+          <li><a href="{% url 'home' %}">Artikel</a></li>
+          <li><a href="{% url 'diagnosa' %}">Diagnosa</a></li>
+          <li><a href="{% url 'riwayat' %}">Riwayat</a></li>
+      
+          {% if user.is_authenticated %}
+            <!-- Display Logout button if user is logged in -->
+            <li><a href="{% url 'logout' %}"><button class="btn">Logout</button></a></li>
+          {% else %}
+            <!-- Display Login button if user is not logged in -->
+            <li><a href="{% url 'login' %}"><button class="btn">Login</button></a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<br><br><br><br><br><br>
+
+<!-- Quiz Form -->
+<div class="quiz-container">
+  <h2>Diagnosa</h2>
+
+  <form action="{% url 'submit_quiz' %}" method="POST">
+    {% csrf_token %}
+
+    <!-- Static List of 20 Questions -->
+    <div class="question">
+      <label for="question1">Menyalahkan diri sendiri?</label>
+      <input type="radio" name="question1" value="1" required> Ya
+      <input type="radio" name="question1" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question2">Sulit mempercayai orang lain?</label>
+      <input type="radio" name="question2" value="1" required> Ya
+      <input type="radio" name="question2" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question3">Ragu untuk melakukan sesuatu?</label>
+      <input type="radio" name="question3" value="1" required> Ya
+      <input type="radio" name="question3" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question4">Sering membandingkan diri sendiri dengan orang lain?</label>
+      <input type="radio" name="question4" value="1" required> Ya
+      <input type="radio" name="question4" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question5">Negative thinking?</label>
+      <input type="radio" name="question5" value="1" required> Ya
+      <input type="radio" name="question5" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question6">Gangguan berinteraksi dengan orang lain?</label>
+      <input type="radio" name="question6" value="1" required> Ya
+      <input type="radio" name="question6" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question7">Bicara dengan suara pelan?</label>
+      <input type="radio" name="question7" value="1" required> Ya
+      <input type="radio" name="question7" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question8">Keringat berlebih?</label>
+      <input type="radio" name="question8" value="1" required> Ya
+      <input type="radio" name="question8" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question9">Tidak suka keramaian?</label>
+      <input type="radio" name="question9" value="1" required> Ya
+      <input type="radio" name="question9" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question10">Punya khayalan/halusinasi yang tidak biasa?</label>
+      <input type="radio" name="question10" value="1" required> Ya
+      <input type="radio" name="question10" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question11">Bicara melantur dan tidak sesuai topik?</label>
+      <input type="radio" name="question11" value="1" required> Ya
+      <input type="radio" name="question11" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question12">Delusi (Keyakinan atau kenyataan semu yang diyakini terus menerus meskipun bukti atau kesepakatan berlawanan)?</label>
+      <input type="radio" name="question12" value="1" required> Ya
+      <input type="radio" name="question12" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question13">Gelisah?</label>
+      <input type="radio" name="question13" value="1" required> Ya
+      <input type="radio" name="question13" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question14">Detak jantung tidak normal?</label>
+      <input type="radio" name="question14" value="1" required> Ya
+      <input type="radio" name="question14" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question15">Mudah teralihkan?</label>
+      <input type="radio" name="question15" value="1" required> Ya
+      <input type="radio" name="question15" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question16">Mudah tersinggung?</label>
+      <input type="radio" name="question16" value="1" required> Ya
+      <input type="radio" name="question16" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question17">Suka mengelak?</label>
+      <input type="radio" name="question17" value="1" required> Ya
+      <input type="radio" name="question17" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question18">Timbul ingatan pada peristiwa traumatis?</label>
+      <input type="radio" name="question18" value="1" required> Ya
+      <input type="radio" name="question18" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question19">Gangguan tidur?</label>
+      <input type="radio" name="question19" value="1" required> Ya
+      <input type="radio" name="question19" value="0" required> Tidak
+    </div>
+    
+    <div class="question">
+      <label for="question20">Sulit berkonsentrasi?</label>
+      <input type="radio" name="question20" value="1" required> Ya
+      <input type="radio" name="question20" value="0" required> Tidak
+    </div>
+
+    <button type="submit" class="btn">Kirim Jawaban</button>
+  </form>
+</select>
+</div>
+</div>
+
+</body>
+</html>

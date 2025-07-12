@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+    <title>Riwayat | BetterUp</title>
+
+    <!-- For print styles -->
+    <style>
+      @media print {
+        .no-print {
+          display: none;
+        }
+      }
+
+      table {
+        width: 80%; /* Adjust width of the table */
+        margin: 0 auto; /* Center the table horizontally */
+        border-collapse: collapse;
+        font-size: 14px; /* Smaller font size */
+      }
+
+      table, th, td {
+        border: 1px solid black;
+      }
+
+      th, td {
+        padding: 8px 12px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      .riwayat-container h2 {
+        text-align: center; /* Center the heading */
+        font-size: 24px; /* Adjust font size of heading */
+      }
+
+      .btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #5d51e8;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      
+      .btn:hover {
+        background-color: #5d51e8;
+      }
+
+      .btn:focus {
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="main-container">
+        <div class="nav">
+          <div class="logo">
+            <a href="/">BetterUp</a>
+          </div>
+
+          <nav>
+            <ul>
+              <li><a href="{% url 'home' %}">Beranda</a></li>
+              <li><a href="{% url 'home' %}">Artikel</a></li>
+              <li><a href="{% url 'diagnosa' %}">Diagnosa</a></li>
+              <li><a href="{% url 'riwayat' %}">Riwayat</a></li>
+          
+              {% if user.is_authenticated %}
+                <!-- Display Logout button if user is logged in -->
+                <li><a href="{% url 'logout' %}"><button class="btn">Logout</button></a></li>
+              {% else %}
+                <!-- Display Login button if user is not logged in -->
+                <li><a href="{% url 'login' %}"><button class="btn">Login</button></a></li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <br><br><br><br><br><br><br>
+
+    <!-- Main Content -->
+    <div class="riwayat-container">
+      <h2>Riwayat Hasil Diagnosa</h2>
+      <br>
+      <!-- Table for Quiz Results -->
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>Tanggal</th>
+            <th>Nilai CF</th>
+            <th>Hasil Penyakit</th>
+            <th>Opsi Cetak</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for hasil in hasil_kuis %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ hasil.user.username }}</td>  <!-- Get the username from user -->
+            <!-- Ensure created_at exists, and format it properly -->
+            <td>{{ hasil.tanggal|date:"d-m-Y" }}</td> <!-- Ensure `created_at` is a valid field in your model -->
+            <td>{{ hasil.nilai_cf }}</td>
+            <td>
+              {% if hasil.penyakit_terdeteksi %}
+                {{ hasil.penyakit_terdeteksi.nama }} (CF: {{ hasil.nilai_cf_terdeteksi }})
+              {% else %}
+                Tidak Terdiagnosa
+              {% endif %}
+            </td>
+            <td>
+              <button class="btn no-print" onclick="printResult({{ forloop.counter }})">Cetak Hasil</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Print Result Content (Hidden in normal view) -->
+    {% for hasil in hasil_kuis %}
+    <div id="details-{{ forloop.counter }}" style="display: none;">
+      <h3>Hasil Diagnosa</h3>
+      <p><strong>Nama:</strong> {{ hasil.user.username }}</p> <!-- Display username -->
+      <p><strong>Tanggal:</strong> {{ hasil.tanggal|date:"d-m-Y" }}</p> <!-- Display and format the date -->
+      <p><strong>Nilai CF:</strong> {{ hasil.nilai_cf }}</p>
+      <p><strong>Hasil Penyakit:</strong>
+        {% if hasil.penyakit_terdeteksi %}
+          {{ hasil.penyakit_terdeteksi.nama }} (CF: {{ hasil.nilai_cf_terdeteksi }})
+        {% else %}
+          Tidak Terdiagnosa
+        {% endif %}
+      </p>
+    </div>
+    {% endfor %}
+
+    <!-- Scripts -->
+    <script>
+      // Print functionality
+      function printResult(index) {
+        var content = document.getElementById('details-' + index).innerHTML;
+        var newWindow = window.open('', '', 'height=600, width=800');
+        newWindow.document.write('<html><head><title>Print Result</title></head><body>');
+        newWindow.document.write(content);
+        newWindow.document.write('</body></html>');
+        newWindow.document.close();
+        newWindow.print();
+      }
+    </script>
+  </body>
+</html>
